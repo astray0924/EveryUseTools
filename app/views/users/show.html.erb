@@ -1,0 +1,242 @@
+<% Time.use_zone('Seoul') do %>	
+<h1><%= link_to "EveryUse Ex ver. Users", "/users/" %></h1>
+
+<h2>User</h2>
+<table border="3">
+	<tr height="40">
+		<th width=" 50">ID</th>
+		<th width="150">Username</th>
+		<th width="200">Email</th>
+		<th width="130">CreatedAt</th>
+		<th width=" 70">#UseCase</th>
+		<th width=" 70">#Wow</th>
+		<th width=" 70">#Metoo</th>
+		<th width=" 70">#Favorite</th>
+		<th width=" 70">#Following</th>
+		<th width=" 70">#Follower</th>
+	</tr>
+<% user = @user %>
+	<tr height="30">
+		<td style="text-align: center;"><%= user.id %></td>
+		<td style="padding-left: 10px;"><%= user.username %></td>
+		<td style="padding-left: 10px;"><%= user.email %></td>
+		<td style="text-align: center;"><%= user.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+		<td style="text-align: center;"><%= user.use_cases.count %></td>
+		<td style="text-align: center;"><%= user.wows.count %></td>
+		<td style="text-align: center;"><%= user.metoos.count %></td>
+		<td style="text-align: center;"><%= user.favorites.count %></td>
+		<td style="text-align: center;"><%= user.relationships.count %></td>
+		<td style="text-align: center;"><%= user.reverse_relationships.count %></td>
+	</tr>
+</table>
+
+<h2>UseCase(<%= user.use_cases.count %>)</h2>
+<table border="3">
+	<tr height="40">
+		<th width=" 50">ID</th>
+		<th width="150">Item</th>
+		<th width=" 40">Type</th>
+		<th width="280">Purpose</th>
+		<th width="150">CreatedAt</th>
+		<th width=" 70">#Wow</th>
+		<th width=" 70">#Metoo</th>
+		<th width=" 70">#Favorite</th>
+	</tr>
+<% for use_case in @user.use_cases %>
+	<tr height="30">
+		<td style="text-align: center;"><%= link_to "#{use_case.id}", "http://everyuse2.kaist.ac.kr/use_cases/#{use_case.id}" %></td>
+		<td style="text-align: center;"><%= use_case.item %></td>
+		<td style="text-align: center;"><%= use_case.purpose_type %></td>
+		<td style="padding-left: 10px;"><%= use_case.purpose %></td>
+		<td style="text-align: center;"><%= use_case.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+		<td style="text-align: center;"><%= use_case.wows_count %></td>
+		<td style="text-align: center;"><%= use_case.metoos_count %></td>
+		<td style="text-align: center;"><%= use_case.favorites_count %></td>
+	</tr>
+<% end %>
+</table>
+
+<h2>Wow(<%= user.wows.count %>)</h2>
+<table border="3">
+	<tr height="40">
+		<th rowspan="2" width=" 50">ID</th>
+		<th colspan="6" width="150">UseCase</th>
+		<th rowspan="2" width="130">Created@</th>
+	</tr>
+	<tr style="height: 25px;">
+		<th width=" 50">ID</th>
+		<th width="150">Item</th>
+		<th width=" 40">Type</th>
+		<th width="280">Purpose</th>
+		<th width="150">Username</th>
+		<th width="130">Created@</th>
+	</tr>
+<% for wow in user.wows %>
+<% begin use_case = UseCase.find(wow.use_case_id) %>
+	<tr height="30">
+		<td style="text-align: center;"><%= wow.id %></td>
+		<td style="text-align: center;"><%= link_to "#{use_case.id}", "http://everyuse2.kaist.ac.kr/use_cases/#{use_case.id}" %></td>
+		<td style="text-align: center;"><%= use_case.item %></td>
+		<td style="text-align: center;"><%= use_case.purpose_type %></td>
+		<td style="text-align: center;"><%= use_case.purpose %></td>
+		<td style="text-align: center;"><%= User.find(use_case.user_id).username %></td>
+		<td style="text-align: center;"><%= use_case.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+		<td style="text-align: center;"><%= wow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% rescue ActiveRecord::RecordNotFound %>
+	<tr height="30">
+		<td style="text-align: center;"><%= metoo.id %></td>
+		<td style="text-align: center; color: #ff8080;" colspan="6">[deleted!]</td>
+		<td style="text-align: center;"><%= metoo.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% end %>
+<% end %>
+</table>
+
+<h2>Metoo(<%= user.metoos.count %>)</h2>
+<table border="3">
+	<tr height="40">
+		<th rowspan="2" width=" 50">ID</th>
+		<th colspan="6" width="150">UseCase</th>
+		<th rowspan="2" width="130">Created@</th>
+	</tr>
+	<tr style="height: 25px;">
+		<th width=" 50">ID</th>
+		<th width="150">Item</th>
+		<th width=" 40">Type</th>
+		<th width="280">Purpose</th>
+		<th width="150">Username</th>
+		<th width="130">Created@</th>
+	</tr>
+<% for metoo in user.metoos %>
+<% begin use_case = UseCase.find(metoo.use_case_id) %>
+	<tr height="30">
+		<td style="text-align: center;"><%= metoo.id %></td>
+		<td style="text-align: center;"><%= link_to "#{use_case.id}", "http://everyuse2.kaist.ac.kr/use_cases/#{use_case.id}" %></td>
+		<td style="text-align: center;"><%= use_case.item %></td>
+		<td style="text-align: center;"><%= use_case.purpose_type %></td>
+		<td style="text-align: center;"><%= use_case.purpose %></td>
+		<td style="text-align: center;"><%= User.find(use_case.user_id).username %></td>
+		<td style="text-align: center;"><%= use_case.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+		<td style="text-align: center;"><%= metoo.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% rescue ActiveRecord::RecordNotFound %>
+	<tr height="30">
+		<td style="text-align: center;"><%= metoo.id %></td>
+		<td style="text-align: center; color: #ff8080;" colspan="6">[deleted!]</td>
+		<td style="text-align: center;"><%= metoo.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% end %>
+<% end %>
+</table>
+
+<h2>Favorite(<%= user.favorites.count %>)</h2>
+<table border="3">
+	<tr height="40">
+		<th rowspan="2" width=" 50">ID</th>
+		<th colspan="6" width="150">UseCase</th>
+		<th rowspan="2" width="130">Created@</th>
+	</tr>
+	<tr style="height: 25px;">
+		<th width=" 50">ID</th>
+		<th width="150">Item</th>
+		<th width=" 40">Type</th>
+		<th width="280">Purpose</th>
+		<th width="150">Username</th>
+		<th width="130">Created@</th>
+	</tr>
+<% for favorite in user.favorites %>
+<% begin use_case = UseCase.find(favorite.use_case_id) %>
+	<tr height="30">
+		<td style="text-align: center;"><%= favorite.id %></td>
+		<td style="text-align: center;"><%= link_to "#{use_case.id}", "http://everyuse2.kaist.ac.kr/use_cases/#{use_case.id}" %></td>
+		<td style="text-align: center;"><%= use_case.item %></td>
+		<td style="text-align: center;"><%= use_case.purpose_type %></td>
+		<td style="text-align: center;"><%= use_case.purpose %></td>
+		<td style="text-align: center;"><%= User.find(use_case.user_id).username %></td>
+		<td style="text-align: center;"><%= use_case.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+		<td style="text-align: center;"><%= favorite.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% rescue ActiveRecord::RecordNotFound %>
+	<tr height="30">
+		<td style="text-align: center;"><%= metoo.id %></td>
+		<td style="text-align: center; color: #ff8080;" colspan="6">[deleted!]</td>
+		<td style="text-align: center;"><%= metoo.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% end %>
+<% end %>
+</table>
+
+<h2>Following(<%= user.relationships.count %>)</h2>
+<table border="3">
+	<tr height="40">
+		<th rowspan="2" width=" 50">ID</th>
+		<th colspan="9" width="150">User</th>
+		<th rowspan="2" width="130">Created@</th>
+	</tr>
+	<tr style="height: 25px;">
+		<th width="150">Username</th>
+		<th width="200">Email</th>
+		<th width="130">Created@</th>
+		<th width=" 70">#UseCase</th>
+		<th width=" 70">#Wow</th>
+		<th width=" 70">#Metoo</th>
+		<th width=" 70">#Favorite</th>
+		<th width=" 70">#Following</th>
+		<th width=" 70">#Follower</th>
+	</tr>
+<% for relationship in user.relationships %>
+<% followed = User.find(relationship.followed_id) %>
+	<tr height="30">
+		<td style="text-align: center;"><%= relationship.id %></td>
+		<td style="padding-left: 10px;"><%= followed.username %></td>
+		<td style="padding-left: 10px;"><%= followed.email %></td>
+		<td style="text-align: center;"><%= followed.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+		<td style="text-align: center;"><%= followed.use_cases.count %></td>
+		<td style="text-align: center;"><%= followed.wows.count %></td>
+		<td style="text-align: center;"><%= followed.metoos.count %></td>
+		<td style="text-align: center;"><%= followed.favorites.count %></td>
+		<td style="text-align: center;"><%= followed.relationships.count %></td>
+		<td style="text-align: center;"><%= followed.reverse_relationships.count %></td>
+		<td style="text-align: center;"><%= relationship.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% end %>
+</table>
+
+<h2>Follower(<%= user.reverse_relationships.count %>)</h2>
+<table border="3">
+	<tr height="40">
+		<th rowspan="2" width=" 50">ID</th>
+		<th colspan="9" width="150">User</th>
+		<th rowspan="2" width="130">Created@</th>
+	</tr>
+	<tr style="height: 25px;">
+		<th width="150">Username</th>
+		<th width="200">Email</th>
+		<th width="130">Created@</th>
+		<th width=" 70">#UseCase</th>
+		<th width=" 70">#Wow</th>
+		<th width=" 70">#Metoo</th>
+		<th width=" 70">#Favorite</th>
+		<th width=" 70">#Following</th>
+		<th width=" 70">#Follower</th>
+	</tr>
+<% for relationship in user.reverse_relationships %>
+<% following = User.find(relationship.follower_id) %>
+	<tr height="30">
+		<td style="text-align: center;"><%= relationship.id %></td>
+		<td style="padding-left: 10px;"><%= following.username %></td>
+		<td style="padding-left: 10px;"><%= following.email %></td>
+		<td style="text-align: center;"><%= following.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+		<td style="text-align: center;"><%= following.use_cases.count %></td>
+		<td style="text-align: center;"><%= following.wows.count %></td>
+		<td style="text-align: center;"><%= following.metoos.count %></td>
+		<td style="text-align: center;"><%= following.favorites.count %></td>
+		<td style="text-align: center;"><%= following.relationships.count %></td>
+		<td style="text-align: center;"><%= following.reverse_relationships.count %></td>
+		<td style="text-align: center;"><%= relationship.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+	</tr>
+<% end %>
+</table>
+
+<% end %>

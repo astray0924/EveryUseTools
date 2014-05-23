@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EveryUse Admin Tool</title>
+<style type="text/css">
+body,input {
+	font-family: Consolas;
+	font-size: 10pt;
+}
+th {
+	border: 1px solid black;
+}
+td {
+	border: 1px solid gray;
+}
+a        { color:#0080C0; text-decoration:none; }
+a:hover  { color:#FF6600; text-decoration:underline; }
+</style>
+<script language="JavaScript">
+function submit_and_sort(sort_value) {
+	search_form.sort.value = sort_value;
+	search_form.submit();
+}
+</script>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

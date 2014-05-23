@@ -1,0 +1,43 @@
+<%Time.use_zone('Seoul') do%>	
+<h1><%=link_to "EveryUse Ex ver. Actions", "/actions/"%></h1>
+
+<form name="search_form" action="/actions" method="get">
+	<h2>User Actions (<%=@actions.count%>)</h2>
+	<input type="hidden" name="sort" value=<%=@sort%> />
+	Time period: 
+	<input type="text" name="time_begin" size="18" value="<%=@time_begin.strftime("%Y-%m-%d %H:%M:%S")%>" /> ~ <input type="text" size="18" name="time_end" value="<%=@time_end.strftime("%Y-%m-%d %H:%M:%S")%>" />
+	<input type="submit" value="Search!" />
+	<table border="3">
+		<tr height="30">
+			<th rowspan="3" width="150" style="padding-top: 5px">Time<br /><sup><%=link_to "[z->a]", "javascript:submit_and_sort('timeZ')"%></sup><sup><%=link_to "[a->z]", "javascript:submit_and_sort('timeA')"%></sup></th>
+			<th rowspan="3" width="180" style="padding-top: 5px">User<br /><sup><%=link_to "[a->z]", "javascript:submit_and_sort('user')"%></sup></th>
+			<th rowspan="3" width=" 60" style="padding-top: 5px">Action<br /><sup><%=link_to "[a->z]", "javascript:submit_and_sort('action')"%></sup></th>
+			<th rowspan="3" width=" 80" style="padding-top: 5px">Target<br /><sup><%=link_to "[a->z]", "javascript:submit_and_sort('target')"%></sup></th>
+			<th colspan="6" width="980" style="padding-top: 5px">Content<br /></th>
+		</tr>
+		<tr height="30">
+			<th rowspan="2" width="180" style="padding-top: 5px">User2<br /><sup><%= link_to "[a->z]", "javascript:submit_and_sort('user2')" %></sup></th>
+			<th colspan="4" width="800" style="padding-top: 5px">UseCase<sup><%= link_to "[a->z]", "javascript:submit_and_sort('use_case')" %></sup></th>
+		</tr>
+		<tr height="30">
+			<th width=" 50">ID</th>
+			<th width="300">Item</th>
+			<th width=" 50">Type</th>
+			<th width="400">Purpose</th>
+		</tr>
+	<%for action in @actions.each%>
+		<tr height="30">
+			<td style="text-align: center;"><%=action[:time].strftime("%Y-%m-%d %H:%M:%S")%></td>
+			<td style="text-align: center;"><%=action[:user][:id]%></td>
+			<td style="text-align: center; font-style: italic;"><%=action[:action]%></td>
+			<td style="text-align: center; font-weight: bold; color: <%=case action[:target] when "use_case" then "#ff9900" when "wow" then "#0080ff" when "metoo" then "#00a800" when "favorite" then "#ff33ff" when "follow" then "#6633ff" end%>"><%= action[:target]%></td>
+			<td style="text-align: center;"><%=action[:content][:class]==:user ?action[:content][:id] :""%></td>
+			<td style="text-align: center;"><%=action[:content][:class]==:use_case ?link_to(action[:content][:id], "http://everyuse2.kaist.ac.kr/use_cases/#{action[:content][:id]}") :""%></td>
+			<td style="text-align: center;"><%=action[:content][:item]%></td>
+			<td style="text-align: center;"><%=action[:content][:type]%></td>
+			<td style="padding-left: 10px;"><%=action[:content][:purpose]%></td>
+		</tr>
+	<%end%>
+	</table>
+</form>
+<%end%>
